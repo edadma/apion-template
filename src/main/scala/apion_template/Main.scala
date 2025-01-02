@@ -1,4 +1,4 @@
-package io.github.edadma.apion_template
+package apion_template
 
 import io.github.edadma.apion._
 import zio.json._

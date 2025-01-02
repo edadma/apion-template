@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon",
     "kill": "kill $(lsof -t -i:3000) || true",
-    "clean": "rm -rf apion/target nodejs/target target"
+    "test": "sbt test"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

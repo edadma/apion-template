@@ -1,4 +1,4 @@
-package io.github.edadma.apion_template
+package apion_template
 
 import org.scalatest._
 import org.scalatest.freespec.AnyFreeSpec
