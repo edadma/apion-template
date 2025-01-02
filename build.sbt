@@ -4,17 +4,20 @@ ThisBuild / evictionErrorLevel := Level.Warn
 
 publish / skip := true
 
-lazy val scalajs_template = project
+lazy val apion_template = project
   .in(file("."))
   .enablePlugins(ScalaJSPlugin)
 //  .enablePlugins(ScalablyTypedConverterPlugin)
   .settings(
-    name         := "scalajs-template",
+    name         := "apion-template",
     version      := "0.0.1",
     scalaVersion := "3.6.2",
     organization := "io.github.edadma",
 //    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.6.0",
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.19" % "test",
+    libraryDependencies ++= Seq(
+//    "org.scalatest" %%% "scalatest" % "3.2.19" % "test",
+      "io.github.edadma" %%% "apion" % "0.0.2-2",
+    ),
 //    libraryDependencies += "com.lihaoyi" %%% "pprint" % "0.9.0" % "test",
     jsEnv                                  := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
     Test / scalaJSUseMainModuleInitializer := true,
@@ -22,7 +25,7 @@ lazy val scalajs_template = project
 //    Test / scalaJSUseMainModuleInitializer := false,
 //    Test / scalaJSUseTestModuleInitializer := true,
     scalaJSUseMainModuleInitializer := true,
-//    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
+    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) },
     publishMavenStyle      := true,
     Test / publishArtifact := false,
     licenses += "ISC"      -> url("https://opensource.org/licenses/ISC"),
