@@ -62,7 +62,6 @@ curl -X POST http://localhost:3000/todos/1/toggle
 │   │   └── apion_template/
 │   │       ├── Main.scala               # Server entry point
 │   │       ├── TodoServer.scala         # Server implementation
-│   │       └── TodoStore.scala          # Data store
 │   └── test/scala/                      # Test source code
 │       └── apion_template/
 │           └── TodoServerSpec.scala     # Integration tests
