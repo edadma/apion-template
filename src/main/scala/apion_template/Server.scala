@@ -67,6 +67,6 @@ def createTodoServer: Server =
               case Some(todo) => todo.asJson
               case None       => "Todo not found".asText(404)
             }
-          case _ => request.failValidation("expected integer 'id'")
+          case _ => failValidation("expected integer 'id'")
       },
     )
