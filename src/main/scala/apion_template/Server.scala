@@ -6,67 +6,57 @@ import zio.json._
 case class Todo(id: Int, text: String, completed: Boolean) derives JsonEncoder, JsonDecoder
 case class CreateTodoRequest(text: String) derives JsonDecoder
 
-object TodoStore {
-  private var todos = List(
-    Todo(1, "Learn Apion", false),
-    Todo(2, "Build an API", false),
-  )
+object TodoStore:
+  private var todos =
+    List(
+      Todo(1, "Learn Apion", false),
+      Todo(2, "Build an API", false),
+    )
   private var nextId = 3
 
   def list: Seq[Todo] = todos
 
-  def create(text: String): Todo = {
+  def create(text: String): Todo =
     val todo = Todo(nextId, text, false)
+
     nextId += 1
     todos = todo :: todos
     todo
-  }
 
-  def toggle(id: Int): Option[Todo] = {
-    todos.find(_.id == id).map { todo =>
+  def toggle(id: Int): Option[Todo] =
+    todos.find(_.id == id) map { todo =>
       val updated = todo.copy(completed = !todo.completed)
+
       todos = todos.map(t => if (t.id == id) updated else t)
       updated
     }
-  }
 
-  def reset(): Unit = {
-    todos = List(
-      Todo(1, "Learn Apion", false),
-      Todo(2, "Build an API", false),
-    )
+  def reset(): Unit =
+    todos =
+      List(
+        Todo(1, "Learn Apion", false),
+        Todo(2, "Build an API", false),
+      )
     nextId = 3
-  }
-}
 
 def createTodoServer: Server =
   Server()
     .use(LoggingMiddleware())
-    .use(CorsMiddleware(CorsMiddleware.Options(
-      origin = CorsMiddleware.Origin.Any,
-    )))
+    .use(CorsMiddleware())
     .get("/todos", _ => TodoStore.list.asJson)
     .post(
       "/todos",
       BodyParser.json[CreateTodoRequest](),
-      request => {
-        request.context.get("body") match {
-          case Some(CreateTodoRequest(text)) =>
-            TodoStore.create(text).asJson(201)
-          case _ =>
-            "Invalid request".asText(400)
-        }
-      },
+      _.context.get("body") match
+        case Some(CreateTodoRequest(text)) => TodoStore.create(text).asJson(201)
+        case _                             => "Invalid request".asText(400),
     )
     .post(
       "/todos/:id/toggle",
-      request => {
-        request.params("id").toIntOption match
-          case Some(id) =>
-            TodoStore.toggle(id) match {
-              case Some(todo) => todo.asJson
-              case None       => "Todo not found".asText(404)
-            }
-          case _ => failValidation("expected integer 'id'")
-      },
+      _.params("id").toIntOption match
+        case Some(id) =>
+          TodoStore.toggle(id) match
+            case Some(todo) => todo.asJson
+            case None       => "Todo not found".asText(404)
+        case _ => failValidation("expected integer 'id'"),
     )
