@@ -2,6 +2,7 @@ package apion_template
 
 import io.github.edadma.apion._
 import zio.json._
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits.global
 
 case class Todo(id: Int, text: String, completed: Boolean) derives JsonEncoder, JsonDecoder
 case class CreateTodoRequest(text: String) derives JsonDecoder
@@ -46,10 +47,10 @@ def createTodoServer: Server =
     .get("/todos", _ => TodoStore.list.asJson)
     .post(
       "/todos",
-      BodyParser.json[CreateTodoRequest](),
-      _.context.get("body") match
+      _.json[CreateTodoRequest].flatMap {
         case Some(CreateTodoRequest(text)) => TodoStore.create(text).asJson(201)
-        case _                             => "Invalid request".asText(400),
+        case _                             => "Invalid request".asText(400)
+      },
     )
     .post(
       "/todos/:id/toggle",
