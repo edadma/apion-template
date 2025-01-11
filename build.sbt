@@ -17,7 +17,7 @@ lazy val apion_template = project
     libraryDependencies ++= Seq(
       "org.scalatest"    %%% "scalatest"                   % "3.2.19" % "test",
       "org.scala-js"     %%% "scala-js-macrotask-executor" % "1.1.1",
-      "io.github.edadma" %%% "apion"                       % "0.0.5",
+      "io.github.edadma" %%% "apion"                       % "0.0.7",
     ),
 //    libraryDependencies += "com.lihaoyi" %%% "pprint" % "0.9.0" % "test",
     jsEnv                                  := new org.scalajs.jsenv.nodejs.NodeJSEnv(),

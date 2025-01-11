@@ -1,8 +1,7 @@
 package apion_template
 
-import io.github.edadma.apion._
-import zio.json._
-import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits.global
+import io.github.edadma.apion.*
+import zio.json.*
 
 case class Todo(id: Int, text: String, completed: Boolean) derives JsonEncoder, JsonDecoder
 case class CreateTodoRequest(text: String) derives JsonDecoder
